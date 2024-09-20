@@ -1,6 +1,8 @@
 # Quasar App (custom-quasar-table-component)
 The CQTable component illustrates how to create your own quasar component by extending existing ones, in this case the QTable component.
 
+![CQTable Component](./CQTable-component.gif)
+
 ## Install the dependencies
 ```bash
 yarn
