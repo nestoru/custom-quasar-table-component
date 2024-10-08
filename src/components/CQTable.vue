@@ -16,7 +16,7 @@
             :style="getColumnStyle(col.name)"
             class="relative-position"
           >
-            <div 
+            <div
               class="row items-center full-width column-header draggable-area"
               @mousedown="startColumnDrag(col.name, $event)"
             >
@@ -28,9 +28,9 @@
                 @click.stop="props.sort(col.name)"
               />
             </div>
-            <div 
+            <div
               v-if="index < visibleColumnsData.length - 1"
-              class="column-resizer" 
+              class="column-resizer"
               @mousedown.stop="startColumnResize(col.name, $event)"
             ></div>
           </q-th>
@@ -148,7 +148,8 @@ export default defineComponent({
     getColumnStyle(colName) {
       return {
         width: `${this.columnWidths[colName]}px`,
-        transition: this.draggedColumn ? 'width 0.2s ease-out' : 'none'
+        transition: this.draggedColumn ? 'width 0.2s ease-out' : 'none',
+        'text-align': this.columns.find(col => col.name === colName)?.align || 'left'
       }
     },
     startColumnDrag(columnName, event) {
@@ -162,27 +163,27 @@ export default defineComponent({
     },
     handleColumnDrag(event) {
       if (!this.draggedColumn) return
-      
+
       this.dragX = event.clientX
       const draggedIndex = this.columnOrder.indexOf(this.draggedColumn)
       const draggedWidth = this.columnWidths[this.draggedColumn]
       const dragCenter = this.dragX - (draggedWidth / 2)
-      
+
       let newIndex = draggedIndex
       let accumulatedWidth = 0
       for (let i = 0; i < this.columnOrder.length; i++) {
         const colName = this.columnOrder[i]
         const colWidth = this.columnWidths[colName]
         const colCenter = accumulatedWidth + (colWidth / 2)
-        
+
         if (dragCenter < colCenter) {
           newIndex = i
           break
         }
-        
+
         accumulatedWidth += colWidth
       }
-      
+
       if (newIndex !== draggedIndex) {
         const newOrder = [...this.columnOrder]
         newOrder.splice(draggedIndex, 1)
@@ -205,17 +206,17 @@ export default defineComponent({
     },
     handleColumnResize(event) {
       if (!this.resizedColumn) return
-      
+
       const index = this.columnOrder.indexOf(this.resizedColumn)
       const nextColumnName = this.columnOrder[index + 1]
-      
+
       const diffX = event.clientX - this.startX
       const newWidth = Math.max(50, this.columnWidths[this.resizedColumn] + diffX)
       const oldWidth = this.columnWidths[this.resizedColumn]
-      
+
       this.columnWidths[this.resizedColumn] = newWidth
       this.columnWidths[nextColumnName] -= (newWidth - oldWidth)
-      
+
       this.startX = event.clientX
       this.$forceUpdate()
     },
